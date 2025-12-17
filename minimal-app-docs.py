@@ -5,13 +5,18 @@ import pandas as pd
 # reading the data 
 df = pd.read_csv('https://raw.githubusercontent.com/plotly/datasets/master/gapminder_unfiltered.csv')
 
+# make pivot table 
+pop_pivot_df = pd.pivot_table(df,index='year', columns='country', values='pop') 
+
 # instantiating the dash app 
 app = Dash()
 
 # Layout consists of Title, dropdown and graph
 app.layout = [
     html.H1(children='Population from 1950 - 2007', style={'textAlign':'center'}, id="graph-title"),
-    dcc.Dropdown(df.country.unique(), 'Canada', id='dd-country-sel-1'),
+    dcc.Dropdown(df.country.unique(), 
+                'Canada', 
+                id='dd-country-sel-1'),
     dcc.Graph(id='graph-content-1'),
 
     # second graphic  
@@ -78,7 +83,7 @@ def update_graph(value):
 # make a new dropdown that changes the title 
 @callback(
     Output('graph-title', 'children'),
-    Input('dropdown-selection', 'value')
+    Input('dd-country-sel-1', 'value')
 )
 def update_title(value):
     """
@@ -95,8 +100,34 @@ def update_title(value):
 # Exercise: Write a callback that makes our bar chart that we made in collab 
 @callback(
     Output('graph-content-2', 'figure'),
-    Input('dropdown-selection', 'value')
+    Input('dd-country-sel-2', 'value'),
+    Input('dd-year-sel-1', 'value')
 )
+def update_graph2(countries_, year_):
+    """
+    Docstring for update_graph2
+    :param values: 
+    countries_ = list of countries from dd-country-sel-2
+    year_  = dd-year-sel-1
+    """ 
+    print("update2 graph:",countries_)
+    print("update2 graph:",year_)
+    # get  population values
+    pop_vals = pop_pivot_df[countries_].loc[year_].tolist()
+
+    bar_chart = px.bar(x=countries_, 
+             y=pop_vals, 
+             title="Population Comparison for 1950",
+             labels={
+                     "x": "Countries",
+                     "y": "Population",
+                    
+                 },)
+    return bar_chart
+
+
+
+
 
 
 
