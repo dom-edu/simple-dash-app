@@ -10,11 +10,6 @@ pop_pivot_df = pd.pivot_table(df,index='year', columns='country', values='pop')
 app = Dash()
 
 # COMPONENTS 
-dd1 = dcc.Dropdown(df.country.unique(), 
-    'Canada', 
-    id='dd-country-sel-1'
-)
-
 dd2 = dcc.Dropdown(df.country.unique(), 
     ['United States', 'France'], 
     placeholder="Select Countries..",
@@ -32,7 +27,6 @@ dd3 = dcc.Dropdown(df.year.unique(),
 # LAYOUT
 app.layout = [
     html.H1(children='Population Stats: 1950 - 2007', style={'textAlign':'center'}, id="graph-title"),
-    dd1,
     dcc.Graph(id='graph-content-1'),
     dd2,
     dd3,
@@ -44,10 +38,10 @@ app.layout = [
 
 @callback(
     Output('graph-content-1', 'figure'),
-    Input('dd-country-sel-1', 'value')
+    Input('dd-country-sel-2', 'value')
 )
 # value from the drop down specified in the input
-def update_graph(value):
+def update_graph(countries_):
     """
     Docstring for update_graph
     
@@ -55,13 +49,18 @@ def update_graph(value):
     """
 
     # filter dataframe by value 
-    dff = df[df.country==value]
+    filter_ = df.country.isin(countries_) 
+    dff = df[filter_]
+
+    # make title 
+    title_ = f'Population of {", ".join(countries_)} between 1950-2007'
 
     # make plotply lineplot 
     ln_plt_fig = px.line(dff, 
                     x='year', 
                     y='pop', 
-                    title=f"Population of {value} between 1950-2007")
+                    title=title_, 
+                    color='country')
 
     return ln_plt_fig
 
