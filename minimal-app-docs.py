@@ -4,6 +4,12 @@ import pandas as pd
 
 # DATA
 df = pd.read_csv('https://raw.githubusercontent.com/plotly/datasets/master/gapminder_unfiltered.csv')
+
+
+# if wanted to filter the df by some years 
+# df = df[df.year >= 2000] say 2000 - 2007 
+# TAKE AWAY -> Don't hardcode values that can be data driven
+
 pop_pivot_df = pd.pivot_table(df,index='year', columns='country', values='pop')  
 
 min_year_ = df['year'].min()
