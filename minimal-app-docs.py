@@ -4,7 +4,10 @@ import pandas as pd
 
 # DATA
 df = pd.read_csv('https://raw.githubusercontent.com/plotly/datasets/master/gapminder_unfiltered.csv')
-pop_pivot_df = pd.pivot_table(df,index='year', columns='country', values='pop') 
+pop_pivot_df = pd.pivot_table(df,index='year', columns='country', values='pop')  
+
+min_year_ = df['year'].min()
+max_year_ = df['year'].max()
 
 # instantiating the dash app 
 app = Dash()
@@ -26,7 +29,7 @@ dd3 = dcc.Dropdown(df.year.unique(),
 
 # LAYOUT
 app.layout = [
-    html.H1(children='Population Stats: 1950 - 2007', style={'textAlign':'center'}, id="graph-title"),
+    html.H1(children=f'Population Stats: {min_year_} - {max_year_}', style={'textAlign':'center'}, id="graph-title"),
     dcc.Graph(id='graph-content-1'),
     dd2,
     dd3,
@@ -53,7 +56,7 @@ def update_graph(countries_):
     dff = df[filter_]
 
     # make title 
-    title_ = f'Population of {", ".join(countries_)} between 1950-2007'
+    title_ = f'Population of {", ".join(countries_)} between {min_year_} - {max_year_}'
 
     # make plotply lineplot 
     ln_plt_fig = px.line(dff, 
