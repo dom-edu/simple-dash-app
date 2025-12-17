@@ -2,63 +2,44 @@ from dash import Dash, html, dcc, callback, Output, Input
 import plotly.express as px
 import pandas as pd
 
-# reading the data 
+# DATA
 df = pd.read_csv('https://raw.githubusercontent.com/plotly/datasets/master/gapminder_unfiltered.csv')
-
-# make pivot table 
 pop_pivot_df = pd.read_csv('data/population-data.csv')
 
 # instantiating the dash app 
 app = Dash()
 
-# Layout consists of Title, dropdown and graph
+# COMPONENTS 
+dd1 = dcc.Dropdown(df.country.unique(), 
+    'Canada', 
+    id='dd-country-sel-1'
+)
+
+dd2 = dcc.Dropdown(df.country.unique(), 
+    ['United States', 'France'], 
+    placeholder="Select Countries..",
+    id='dd-country-sel-2',
+    multi= True
+)
+
+dd3 = dcc.Dropdown(df.year.unique(), 
+    2007, 
+    placeholder='Select Year...',
+    id='dd-year-sel-2',
+)
+
+
+# LAYOUT
 app.layout = [
     html.H1(children='Population from 1950 - 2007', style={'textAlign':'center'}, id="graph-title"),
-    dcc.Dropdown(df.country.unique(), 
-                'Canada', 
-                id='dd-country-sel-1'),
+    dd1,
     dcc.Graph(id='graph-content-1'),
-
-    # second graphic  
-    dcc.Dropdown(df.country.unique(), 
-                ['United States', 'France'], 
-                placeholder="Select Countries..",
-                id='dd-country-sel-2',
-                multi= True
-                ),
-
-    # Exercise : add another drop down to select a year 
-    dcc.Dropdown(df.year.unique(), 
-                2007, 
-                placeholder='Select Year...',
-                id='dd-year-sel-1',
-                ),
-
+    dd2,
+    dd3,
     dcc.Graph(id='graph-content-2')
-    
 ]
 
-"""
-Callbacks allows data to flow between components 
-i.e. from the dropdown -> graph via user interaction
-i.e. select a different country 
-
-
-Syntax of Callback parameters (registers an output and input component for data flow)
-
-Output(id, property)
-Input(id, property)
-
-Output('graph-content', 'figure'),
-Input('dropdown-selection', 'value')
-
-This @callback decorator applies to the update_graph
-
-your function needs def update_
-below it's called update_graph
-
-
-"""
+# CALLBACKS
 
 @callback(
     Output('graph-content-1', 'figure'),
