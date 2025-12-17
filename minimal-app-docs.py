@@ -95,5 +95,9 @@ def update_graph2(countries_, year_):
                  },)
     return bar_chart
 
+
+# Exercise: Add another call back / graph for GDP percentage
+# https://plotly.com/python/basic-charts/, pick a basic chart 
+
 if __name__ == '__main__':
     app.run(debug=True)
