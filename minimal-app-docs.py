@@ -62,7 +62,7 @@ below it's called update_graph
 
 @callback(
     Output('graph-content-1', 'figure'),
-    Input('dropdown-selection', 'value')
+    Input('dd-country-sel-1', 'value')
 )
 # value from the drop down specified in the input
 def update_graph(value):
@@ -117,7 +117,7 @@ def update_graph2(countries_, year_):
 
     bar_chart = px.bar(x=countries_, 
              y=pop_vals, 
-             title="Population Comparison for 1950",
+             title=f"Population Comparison for {year_}",
              labels={
                      "x": "Countries",
                      "y": "Population",
@@ -127,8 +127,6 @@ def update_graph2(countries_, year_):
 
 
 # Exercise: Refactor code to update the title for the year in the bar chart
-
-
 
 if __name__ == '__main__':
     app.run(debug=True)
