@@ -36,9 +36,9 @@ dd3 = dcc.Dropdown(df.year.unique(),
 # LAYOUT
 app.layout = [
     html.H1(children=f'Population Stats: {min_year_} - {max_year_}', style={'textAlign':'center'}, id="graph-title"),
-    dcc.Graph(id='graph-content-1'),
     dd2,
     dd3,
+    dcc.Graph(id='graph-content-1'),
     dcc.Graph(id='graph-content-2'),
     dcc.Graph(id="graph-content-3")
 ]
